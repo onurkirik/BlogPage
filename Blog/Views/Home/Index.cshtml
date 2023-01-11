@@ -1,8 +1,38 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HomeviewModel
+@{
+    @(ViewBag.Title == null ? "Yazılarım" : (string)ViewBag.Title)
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h3 class="pb-4 mb-4 fst-italic border-bottom">
+        @ViewBag.Title
+</h3>
+
+@foreach (var despatch in Model.Despatches)
+{
+    <article class="blog-post">
+        <h2 class="blog-post-title mb-1">@despatch.Title</h2>
+        <p class="blog-post-meta">
+            <a href="#">Yönetici</a> tarafından @despatch.CreatedDate.ToShortDateString() tarihinde yazıldı.
+        </p>
+        @Html.Raw(despatch.Content) 
+    </article>
+}
+
+<nav class="blog-pagination" aria-label="Pagination">
+    @if (Model.ExistOldPage)
+    {
+    <a class="btn btn-outline-primary rounded-pill" asp-route-page="@(Model.Page + 1)" asp-route-categoryId ="@Model.CategoryId">Older</a>        
+    }
+    else
+    {
+    <a class="btn btn-outline-secondary rounded-pill disabled">Older</a>        
+    }
+    @if (Model.ExistNewPage)
+    {
+        <a class="btn btn-outline-primary rounded-pill" asp-route-page="@(Model.Page - 1)" asp-route-categoryId="@Model.CategoryId">Newer</a>
+    }
+    else
+    {
+    <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>       
+    }
+</nav>
