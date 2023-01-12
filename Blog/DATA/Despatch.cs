@@ -8,7 +8,7 @@ namespace Blog.DATA
         [Required]
         [MaxLength(400)]
         public string Title { get; set; } = null!;
-        public string? Content { get; set; }
+        public string? Content { get; set; } = "";
         [MaxLength(255)]
         public string? Image { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
