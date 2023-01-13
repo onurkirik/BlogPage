@@ -27,7 +27,10 @@ namespace Blog.Controllers
 
             int pageNumber = (int)Math.Ceiling((double)despatches.Count() / Constants.DESPATCH_PER_PAGE);
 
-            despatches = despatches.Skip((page - 1) * Constants.DESPATCH_PER_PAGE).Take(Constants.DESPATCH_PER_PAGE);
+            despatches = despatches
+                .OrderByDescending(d => d.CreatedDate)
+                .Skip((page - 1) * Constants.DESPATCH_PER_PAGE)
+                .Take(Constants.DESPATCH_PER_PAGE);
 
             var vm = new HomeviewModel()
             {

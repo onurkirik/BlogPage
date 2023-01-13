@@ -1,0 +1,40 @@
+﻿@model DespatchViewModel
+@{
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    ViewBag.Title = action == "New" ? "New Despatche" : "Edit Despatche";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Despatch Title</label>
+        <input asp-for="Title" type="text" class="form-control" placeholder="Title...">
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label">Despatch Content</label>
+        <textarea asp-for="Content" class="form-control" id="Content"></textarea>
+        <span asp-validation-for="Content"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+            <option value="">Select</option>
+
+        </select>
+        <span asp-validation-for="CategoryId"></span>
+    </div>
+    <div>
+        <button class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-danger">Cancel</a>
+    </div>
+</form>
+
+
+@section Scripts {
+    <script>
+        $('#Content').summernote({
+            height: 200,
+
+        });
+    </script>
+}
