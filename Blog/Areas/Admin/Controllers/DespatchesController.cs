@@ -49,7 +49,7 @@ namespace Blog.Areas.Admin.Controllers
 
                 _db.Despatches.Add(despatch);
                 _db.SaveChanges();
-                return RedirectToAction(nameof(Index), new { status = "Added." });
+                return RedirectToAction(nameof(Index), new { status = "added" });
             }
             UploadCategories();
             return View("Manage");
@@ -57,7 +57,56 @@ namespace Blog.Areas.Admin.Controllers
 
         public IActionResult Edit(int id)
         {
+            var despatch = _db.Despatches.Find(id);
+
+            if (despatch == null)
+                return NotFound();
+
+            var vm = new DespatchViewModel()
+            {
+                Id = despatch.Id,
+                Title = despatch.Title,
+                Content = despatch.Content,
+                CategoryId = despatch.CategoryId
+            };
+
+            UploadCategories();
+            return View("Manage", vm);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Edit(DespatchViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var despatch = _db.Despatches.Find(vm.Id);
+
+                if (despatch == null)
+                    return NotFound();
+
+                despatch.Title = vm.Title;
+                despatch.Content = vm.Content;
+                despatch.ChangedDate = DateTime.Now;
+                despatch.CategoryId = vm.CategoryId!.Value;
+
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Index), new { status = "edited" });
+            }
+            UploadCategories();
             return View("Manage");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var despatch = _db.Despatches.Find(id);
+
+            if (despatch == null)
+                return NotFound();
+
+            _db.Despatches.Remove(despatch);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index), new { status = "deleted" });
         }
     }
 }
